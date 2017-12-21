@@ -3,9 +3,9 @@ import {
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
-import { Button } from 'react-native-elements';
 
 const Realm = require('realm');
 
@@ -26,17 +26,36 @@ class OnePage extends Component {
     });
   }
 
+  handleClicker() {
+    Realm.open({
+      schema: [{name: 'Dog', properties: {name: 'string'}}]
+    }).then(realm => {
+      realm.write(() => {
+        realm.create('Dog', {name: 'Blue'});
+      });
+      this.setState({ realm });
+    }).then(alert("You added 1 more puppy!"))
+  }
+
   render() {
     const info = this.state.realm
       ? 'Number of dogs in this Realm: ' + this.state.realm.objects('Dog').length
       : 'Loading...';
 
     return (
-      <Text style={styles.container && styles.welcome}>
-        <Text>
+      <View style={styles.container}>
+        <Text style={styles.welcome}>
           {info}
         </Text>
-      </Text>
+        <Button
+          // dont use onPress={this.handleClicker}
+          // writing it that way below binds it 
+          // to the referrenced this
+          onPress={() => this.handleClicker()}
+          title="Add a puppy"
+          accessibilityLabel="Click to add a puppy"
+        />
+      </View>
     );
   }
 }
