@@ -43,7 +43,7 @@ class OnePage extends Component {
       : 'Loading...';
 
     return (
-      <View style={styles.container}>
+      <View>
         <Text style={styles.welcome}>
           {info}
         </Text>
